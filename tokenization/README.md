@@ -2,6 +2,8 @@
 
 *from @AndrejKarpathy*
 
+---
+
 Tokenization is at the heart of much weirdness of LLMs. Do not brush it off.
 
     Why can't LLM spell words? Tokenization.
