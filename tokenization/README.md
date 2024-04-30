@@ -26,6 +26,9 @@ Tokenization is at the heart of much weirdness of LLMs. Do not brush it off.
     
     What is the real root of suffering? Tokenization.
 
+
+Cool [vercel](https://tiktokenizer.vercel.app/?model=gpt-4-1106-preview) app to play around different tokenizers and see how they differ
+
 Huggingface provides two versions of tokenizers libraries:
 
  - Full python implementation of the tokenizer
