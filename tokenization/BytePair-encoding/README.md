@@ -17,3 +17,14 @@ Byte-Pair Encoding is a method for compressing text data by representing words a
   *Recursion*: Steps 2-4 are repeated recursively until the desired level of compression is reached.
 
 
+
+```python
+import tiktoken
+enc = tiktoken.get_encoding("cl100k_base") # GPT-4 tokenizer
+print(enc.encode("привет 👋 (hello in Russian!)"))
+print(enc.decode(enc.encode("привет 👋 (hello in Russian!)")) == "привет 👋 (hello in Russian!)")
+```
+
+
+
+
