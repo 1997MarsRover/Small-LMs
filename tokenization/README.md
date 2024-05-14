@@ -29,7 +29,11 @@ Tokenization is at the heart of much weirdness of LLMs. Do not brush it off.
     What is the real root of suffering? Tokenization.
 
 
-Cool [vercel](https://tiktokenizer.vercel.app/?model=gpt-4-1106-preview) app to play around different tokenizers and see how they differ
+Cool [vercel](https://tiktokenizer.vercel.app/?model=gpt-4-1106-preview) app to play around different tokenizers and see how they differ.
+
+Here is OAI GPT-4o tokenizer tokenizing non-english words. Performs better than GPT-4 tokenizer, cl100k_base.
+
+![image](https://github.com/1997MarsRover/Small-LMs/assets/116155840/7214d36a-82e2-4016-99d3-7f31e1f7290e)
 
 Huggingface provides two versions of tokenizers libraries:
 
