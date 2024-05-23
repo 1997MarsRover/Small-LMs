@@ -1,4 +1,8 @@
 ## talk about Transfromers🤖
+
+
+![image](https://github.com/1997MarsRover/Small-LMs/assets/116155840/97eed138-1fac-43fc-ab8c-86ee139d0e25)
+
 ## Why should I use transformers?
 
 1. Easy-to-use state-of-the-art models:
