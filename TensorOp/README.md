@@ -57,3 +57,124 @@ Now, let's add some methods to implement basic tensor operations, such as additi
 2. How will you implement more complex tensor operations, such as matrix multiplication and convolution?
 3. How will you optimize your tensor operations for performance?
 
+
+**Tensor Addition**
+
+When adding two tensors, we need to consider their dimensions. Here are the rules:
+
+* **Scalar addition**: If one tensor is a scalar (0D), it can be added to another tensor by broadcasting the scalar to match the shape of the other tensor.
+* **Element-wise addition**: If both tensors have the same shape, we can add them element-wise.
+* **Error**: If the tensors have different shapes and cannot be broadcasted, an error is raised.
+
+**Tensor Multiplication**
+
+When multiplying two tensors, we need to consider their dimensions. Here are the rules:
+
+* **Scalar multiplication**: If one tensor is a scalar (0D), it can be multiplied to another tensor by broadcasting the scalar to match the shape of the other tensor.
+* **Matrix multiplication**: If both tensors are 2D, we can perform matrix multiplication (dot product).
+* **Element-wise multiplication**: If both tensors have the same shape, we can multiply them element-wise.
+* **Error**: If the tensors have different shapes and cannot be multiplied, an error is raised.
+
+**Tensor Dimensions and Broadcasting**
+
+When performing tensor operations, we need to consider the dimensions of the tensors. Here are some key concepts:
+
+* **Shape**: The shape of a tensor is a tuple representing its dimensions (e.g., (2, 3) for a 2x3 matrix).
+* **Broadcasting**: When a tensor with a smaller shape is used in an operation with a tensor with a larger shape, the smaller tensor is "broadcasted" to match the shape of the larger tensor by repeating its values along the missing dimensions.
+
+Now, let's implement the `__add__` and `__mul__` methods for our `Tensor` class. We'll start with scalar addition and multiplication, and then move on to element-wise operations.
+
+
+**Tensor Addition**
+
+The `__add__` method handles tensor addition. Here's a step-by-step breakdown:
+
+1. **Check for scalar addition**: If one of the tensors is a scalar (0D), broadcast it to match the shape of the other tensor.
+2. **Check for shape compatibility**: If both tensors have the same shape, perform element-wise addition. Otherwise, raise an error.
+
+The formula for element-wise addition is:
+
+`c[i] = a[i] + b[i]`
+
+where `a`, `b`, and `c` are tensors, and `i` indexes the elements.
+
+Here's the implementation:
+```python
+def __add__(self, other):
+    if isinstance(other, (int, float)):  # scalar addition
+        other = Tensor(other, requires_grad=self.requires_grad)
+    if self.shape != other.shape:
+        raise ValueError("Tensors must have the same shape for addition")
+    return Tensor([a + b for a, b in zip(self.data, other.data)], requires_grad=self.requires_grad)
+```
+**Tensor Multiplication**
+
+The `__mul__` method handles tensor multiplication. Here's a step-by-step breakdown:
+
+1. **Check for scalar multiplication**: If one of the tensors is a scalar (0D), broadcast it to match the shape of the other tensor.
+2. **Check for matrix multiplication**: If both tensors are 2D, perform matrix multiplication (dot product).
+3. **Check for element-wise multiplication**: If both tensors have the same shape, perform element-wise multiplication. Otherwise, raise an error.
+
+The formulas for matrix multiplication and element-wise multiplication are:
+
+**Matrix Multiplication (Dot Product)**
+
+`c[i, j] = sum(a[i, k] * b[k, j])`
+
+where `a`, `b`, and `c` are tensors, and `i`, `j`, and `k` index the elements.
+
+**Element-wise Multiplication**
+
+`c[i] = a[i] * b[i]`
+
+where `a`, `b`, and `c` are tensors, and `i` indexes the elements.
+
+Here's the implementation:
+```python
+def __mul__(self, other):
+    if isinstance(other, (int, float)):  # scalar multiplication
+        other = Tensor(other, requires_grad=self.requires_grad)
+    if len(self.shape) == 2 and len(other.shape) == 2:  # matrix multiplication
+        if self.shape[1] != other.shape[0]:
+            raise ValueError("Incompatible shapes for matrix multiplication")
+        result_data = [[sum(a * b for a, b in zip(row, col)) for col in zip(*other.data)] for row in self.data]
+        return Tensor(result_data, requires_grad=self.requires_grad)
+    elif self.shape == other.shape:  # element-wise multiplication
+        return Tensor([a * b for a, b in zip(self.data, other.data)], requires_grad=self.requires_grad)
+    else:
+        raise ValueError("Incompatible shapes for multiplication")
+```
+**Broadcasting**
+
+When performing tensor operations, broadcasting is used to match the shapes of the tensors. Here are the broadcasting rules:
+
+* If the tensors have different numbers of dimensions, the tensor with fewer dimensions is broadcasted to have the same number of dimensions by adding new axes (dimensions) with size 1.
+* If the tensors have the same number of dimensions, but different sizes in some dimensions, the tensor with the smaller size in that dimension is broadcasted to match the larger size by repeating its values along that dimension.
+
+For example, if we have two tensors `a` with shape `(2, 3)` and `b` with shape `(3,)`, broadcasting `b` to match `a` would result in `b` having shape `(1, 3)`, where the value of `b` is repeated along the new axis (dimension) with size 1.
+
+**Tensor Dimensions and Shapes**
+
+When working with tensors, it's essential to understand the concept of dimensions and shapes. Here are some key concepts:
+
+* **Rank**: The number of dimensions in a tensor.
+* **Shape**: A tuple representing the size of each dimension in a tensor.
+* **Axis**: A single dimension in a tensor.
+
+For example, a tensor with shape `(2, 3, 4)` has a rank of 3 and three axes: axis 0 with size 2, axis 1 with size 3, and axis 2 with size 4.
+
+`TODO`
+
+
+Now that we have implemented tensor addition and multiplication, let's move on to more complex tensor operations, such as:
+
+* Matrix multiplication with broadcasting
+* Element-wise operations with broadcasting
+* Convolutional operations
+* Tensor contraction and reduction
+
+We'll also explore advanced topics, such as:
+
+* Tensor decomposition and factorization
+* Tensor networks and graph-based representations
+* Tensor optimization and compression
