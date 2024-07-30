@@ -1,5 +1,8 @@
 ## tensor Operations
 
+<div style="display: flex; justify-content: center; align-items: center;"><img src="assets/tensor.png" alt="Tensor Image" style="width:40%; height: 40%;">
+</div>
+
 But what is a Tensor really? a tensor is a -dimensional matrix. Okay, but what is a torch.Tensor? Specifically, what actually happens when the following piece of code is run: a = torch.tensor(1.0, requires_grad=True). It turns out that PyTorch will allocate the data on the heap and returns the pointer to that data as a shared pointer 1
 
 What happens when you create a tensor in using torch.tensor? 
