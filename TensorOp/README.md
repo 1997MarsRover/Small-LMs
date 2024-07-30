@@ -166,8 +166,6 @@ When working with tensors, it's essential to understand the concept of dimension
 
 For example, a tensor with shape `(2, 3, 4)` has a rank of 3 and three axes: axis 0 with size 2, axis 1 with size 3, and axis 2 with size 4.
 
-`TODO`
-
 
 Now that we have implemented tensor addition and multiplication, let's move on to more complex tensor operations, such as:
 
@@ -176,6 +174,100 @@ Now that we have implemented tensor addition and multiplication, let's move on t
 * Convolutional operations
 * Tensor contraction and reduction
 
+**Matrix Multiplication with Broadcasting**
+
+To implement matrix multiplication with broadcasting, we need to consider the following cases:
+
+* `a` is a 2D tensor, `b` is a 1D tensor (broadcast `b` to 2D)
+* `a` is a 2D tensor, `b` is a 2D tensor (perform matrix multiplication)
+* `a` is a 1D tensor, `b` is a 2D tensor (broadcast `a` to 2D)
+
+Here's the updated implementation:
+```python
+def __mul__(self, other):
+    if isinstance(other, (int, float)):  # scalar multiplication
+        other = Tensor(other, requires_grad=self.requires_grad)
+    if len(self.shape) == 2 and len(other.shape) == 1:  # matrix multiplication with broadcasting
+        other = Tensor(other.data.reshape(-1, 1), requires_grad=self.requires_grad)
+    elif len(self.shape) == 1 and len(other.shape) == 2:  # matrix multiplication with broadcasting
+        self = Tensor(self.data.reshape(-1, 1), requires_grad=self.requires_grad)
+    if len(self.shape) == 2 and len(other.shape) == 2:  # matrix multiplication
+        if self.shape[1] != other.shape[0]:
+            raise ValueError("Incompatible shapes for matrix multiplication")
+        result_data = [[sum(a * b for a, b in zip(row, col)) for col in zip(*other.data)] for row in self.data]
+        return Tensor(result_data, requires_grad=self.requires_grad)
+    elif self.shape == other.shape:  # element-wise multiplication
+        return Tensor([a * b for a, b in zip(self.data, other.data)], requires_grad=self.requires_grad)
+    else:
+        raise ValueError("Incompatible shapes for multiplication")
+```
+**Element-wise Operations with Broadcasting**
+
+To implement element-wise operations with broadcasting, we need to consider the following cases:
+
+* `a` is a 1D tensor, `b` is a 1D tensor (perform element-wise operation)
+* `a` is a 2D tensor, `b` is a 1D tensor (broadcast `b` to 2D)
+* `a` is a 1D tensor, `b` is a 2D tensor (broadcast `a` to 2D)
+
+Here's the updated implementation:
+```python
+def __add__(self, other):
+    if isinstance(other, (int, float)):  # scalar addition
+        other = Tensor(other, requires_grad=self.requires_grad)
+    if len(self.shape) == 1 and len(other.shape) == 1:  # element-wise addition
+        return Tensor([a + b for a, b in zip(self.data, other.data)], requires_grad=self.requires_grad)
+    elif len(self.shape) == 2 and len(other.shape) == 1:  # element-wise addition with broadcasting
+        other = Tensor(other.data.reshape(-1, 1), requires_grad=self.requires_grad)
+        return Tensor([a + b for a, b in zip(self.data, other.data)], requires_grad=self.requires_grad)
+    elif len(self.shape) == 1 and len(other.shape) == 2:  # element-wise addition with broadcasting
+        self = Tensor(self.data.reshape(-1, 1), requires_grad=self.requires_grad)
+        return Tensor([a + b for a, b in zip(self.data, other.data)], requires_grad=self.requires_grad)
+    else:
+        raise ValueError("Incompatible shapes for addition")
+```
+**Convolutional Operations**
+
+To implement convolutional operations, we need to consider the following cases:
+
+* `a` is a 3D tensor (input), `b` is a 3D tensor (kernel)
+* `a` is a 4D tensor (input), `b` is a 4D tensor (kernel)
+
+Here's a basic implementation of convolutional operations:
+```python
+def conv2d(self, kernel):
+    if len(self.shape) != 3 or len(kernel.shape) != 3:
+        raise ValueError("Incompatible shapes for convolution")
+    if self.shape[0] != kernel.shape[0] or self.shape[1] != kernel.shape[1]:
+        raise ValueError("Incompatible shapes for convolution")
+    result_data = []
+    for i in range(self.shape[0] - kernel.shape[0] + 1):
+        for j in range(self.shape[1] - kernel.shape[1] + 1):
+            patch = self.data[i:i+kernel.shape[0], j:j+kernel.shape[1]]
+            result_data.append(sum(a * b for a, b in zip(patch, kernel.data)))
+    return Tensor(result_data, requires_grad=self.requires_grad)
+```
+**Tensor Contraction and Reduction**
+
+To implement tensor contraction and reduction, we need to consider the following cases:
+
+* `a` is a 2D tensor, `axis=0` (sum along rows)
+* `a` is a 2D tensor, `axis=1` (sum along columns)
+* `a` is a 3D tensor, `axis=0` (sum along first dimension)
+* `a` is a 3D tensor, `axis=1` (sum along second dimension)
+* `a` is a 3D tensor, `axis=2` (sum along third dimension)
+
+Here's a basic implementation of tensor contraction and reduction:
+```python
+def sum(self, axis):
+    if axis == 0:
+        return Tensor([sum(row) for row in self.data], requires_grad=self.requires_grad)
+    elif axis == 1:
+        return Tensor([sum(col) for col in zip(*self.data)], requires_grad=self.requires_grad)
+    else:
+        raise ValueError("Invalid axis for sum reduction")
+```
+
+That's it for now! You've got a solid foundation for tensor operations.
 We'll also explore advanced topics, such as:
 
 * Tensor decomposition and factorization
