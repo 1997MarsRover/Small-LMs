@@ -147,6 +147,38 @@ def __mul__(self, other):
     else:
         raise ValueError("Incompatible shapes for multiplication")
 ```
+
+//lets write a code exmaple of using a tensor to do matumul and sum```python
+# Create two 2D tensors
+a = Tensor([[1, 2], [3, 4]], requires_grad=True)
+b = Tensor([[5, 6], [7, 8]], requires_grad=True)
+
+# Perform matrix multiplication
+c = a * b
+
+# Print the result
+print("Matrix Multiplication Result:")
+print(c)
+
+# Perform element-wise sum
+d = a + a
+
+# Print the result
+print("Element-wise Sum Result:")
+print(d)
+
+# Create two tensors for broadcasting
+e = Tensor([[1, 2], [3, 4]], requires_grad=True)
+f = Tensor(2, requires_grad=True)
+
+# Perform scalar addition with broadcasting
+g = e + f
+
+# Print the result
+print("Scalar Addition with Broadcasting Result:")
+print(g)
+```
+
 **Broadcasting**
 
 When performing tensor operations, broadcasting is used to match the shapes of the tensors. Here are the broadcasting rules:
