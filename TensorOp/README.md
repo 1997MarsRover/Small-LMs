@@ -45,21 +45,12 @@ class Tensor:
 
 This `Tensor` class has an `__init__` method that takes in `data` and an optional `requires_grad` flag. It also has a `__str__` method to provide a nice string representation of the tensor.
 
-Now, let's add some methods to implement basic tensor operations, such as addition and multiplication.You've got a good start on your notes about tensor operations and implementing a basic `Tensor` class. Here's a curt yet helpful response to get you moving forward:
-
 **Next steps:**
 
 1. Implement `__add__` and `__mul__` methods for tensor addition and multiplication.
 2. Consider adding a `backward` method to compute gradients when `requires_grad` is `True`.
 3. You might want to add more metadata, such as `shape` and `dtype`, to your `Tensor` class.
 4. Think about how you'll handle tensor operations with broadcasting and scalar values.
-
-**Questions to consider:**
-
-1. How will you handle tensor operations with different data types (e.g., float, int)?
-2. How will you implement more complex tensor operations, such as matrix multiplication and convolution?
-3. How will you optimize your tensor operations for performance?
-
 
 **Tensor Addition**
 
@@ -148,36 +139,6 @@ def __mul__(self, other):
         raise ValueError("Incompatible shapes for multiplication")
 ```
 
-//lets write a code exmaple of using a tensor to do matumul and sum```python
-# Create two 2D tensors
-a = Tensor([[1, 2], [3, 4]], requires_grad=True)
-b = Tensor([[5, 6], [7, 8]], requires_grad=True)
-
-# Perform matrix multiplication
-c = a * b
-
-# Print the result
-print("Matrix Multiplication Result:")
-print(c)
-
-# Perform element-wise sum
-d = a + a
-
-# Print the result
-print("Element-wise Sum Result:")
-print(d)
-
-# Create two tensors for broadcasting
-e = Tensor([[1, 2], [3, 4]], requires_grad=True)
-f = Tensor(2, requires_grad=True)
-
-# Perform scalar addition with broadcasting
-g = e + f
-
-# Print the result
-print("Scalar Addition with Broadcasting Result:")
-print(g)
-```
 
 **Broadcasting**
 
